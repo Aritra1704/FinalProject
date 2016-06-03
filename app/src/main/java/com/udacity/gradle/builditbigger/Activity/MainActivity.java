@@ -1,22 +1,31 @@
-package com.udacity.gradle.builditbigger;
+package com.udacity.gradle.builditbigger.Activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.support.multidex.MultiDex;
+import android.support.v4.util.Pair;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import com.arpaul.jokesandroid.ShowJokesActivity;
-import com.example.JokesClass;
+import com.udacity.gradle.builditbigger.Listener.onJokeReceived;
+import com.udacity.gradle.builditbigger.R;
+import com.udacity.gradle.builditbigger.WebServices.EndpointsAsyncTask;
 
 
 public class MainActivity extends AppCompatActivity {
 
+    //https://github.com/shivasurya/P4-Build-it-Bigger
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MultiDex.install(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
@@ -45,9 +54,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view){
-        Intent intent = new Intent(this,ShowJokesActivity.class);
-        intent.putExtra("jokes",new JokesClass().getJokes());
-        startActivity(intent);
+
+        new EndpointsAsyncTask().execute(new onJokeReceived() {
+            @Override
+            public void OnJokeReceivedListener(String joke) {
+                if(joke!=null) {
+                    Log.d("log", joke);
+                    /*if (mInterstitialAd.isLoaded()) {
+                        mInterstitialAd.show();
+                    } else {*/
+                        Intent intent = new Intent(MainActivity.this,ShowJokesActivity.class);
+                        intent.putExtra("jokes",joke);
+                        startActivity(intent);
+                    //}
+                }
+            }
+
+        });
+
+        //new EndpointsAsyncTask().execute(new Pair<Context, String>(this, "Joking Aritra"));
+
+//        Intent intent = new Intent(this,ShowJokesActivity.class);
+//        intent.putExtra("jokes",new JokesClass().getJokes());
+//        startActivity(intent);
         //Toast.makeText(this, new JokesClass().getJokes(), Toast.LENGTH_SHORT).show();
     }
 
