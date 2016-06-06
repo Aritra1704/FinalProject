@@ -17,3 +17,11 @@ allprojects {
         jcenter()
     }
 }
+
+task automateTesting(dependsOn: [':backend:appengineRun'
+                                 ,':app:connectedFreeDebugAndroidTest'
+                                 ,':backend:appengineStop']){
+
+    tasks.findByPath(':backend:appengineRun')
+    tasks.findByPath(':backend:appengineStop').mustRunAfter ':app:connectedFreeDebugAndroidTest'
+}
