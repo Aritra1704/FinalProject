@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.arpaul.jokesandroid.ShowJokesActivity;
 import com.udacity.gradle.builditbigger.Listener.onJokeReceived;
 import com.udacity.gradle.builditbigger.WebServices.EndpointsAsyncTask;
+import com.udacity.gradle.builditbigger.R;
 
 
 /**
